@@ -1,4 +1,4 @@
-package com.testShoopingCard.shopping_card.entity;
+package com.testShoopingCard.shopping_card.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,16 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
     private BigDecimal price;
     private int inventory;
     private String brand;
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
+    //    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)     // when product deleted its relavant images will be deleted
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)     // when product deleted its relavant images will be deleted
     private List<Image> images;
 }

@@ -1,4 +1,4 @@
-package com.testShoopingCard.shopping_card.entity;
+package com.testShoopingCard.shopping_card.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,13 @@ import java.sql.Blob;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String fileName;
     private String fileType;
-    @Lob
-    private Blob image;
+    @Lob        //  large object
+    private Blob image;     // binary large objects
     private String downloadURL;
+    private String fileSize;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

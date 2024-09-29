@@ -1,4 +1,4 @@
-package com.testShoopingCard.shopping_card.entity;
+package com.testShoopingCard.shopping_card.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
     @OneToMany(mappedBy = "category")
     private List<Product> products;

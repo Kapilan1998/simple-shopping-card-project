@@ -46,11 +46,15 @@ public class CartService implements CartInterface {
     }
 
     @Override
-    public Integer initializeNewCart(){
+    public Integer initializeNewCart() {
         Cart newCart = new Cart();
         Integer newCardId = cardIdGenerator.incrementAndGet();
         newCart.setId(newCardId);
         return cartRepository.save(newCart).getId();
     }
 
+    @Override
+    public Cart getCartByUserId(Integer userId) {
+        return cartRepository.findByUserId(userId);
+    }
 }

@@ -9,6 +9,7 @@ import com.testShoopingCard.shopping_card.Service.Interfaces.CartInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,6 +30,7 @@ public class CartService implements CartInterface {
         return cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
     public void clearCart(Integer id) {
         Cart cart = getCart(id);

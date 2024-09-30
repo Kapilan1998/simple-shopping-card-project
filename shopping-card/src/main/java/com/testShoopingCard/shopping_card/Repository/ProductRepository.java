@@ -1,8 +1,6 @@
 package com.testShoopingCard.shopping_card.Repository;
 
 import com.testShoopingCard.shopping_card.Entity.Product;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

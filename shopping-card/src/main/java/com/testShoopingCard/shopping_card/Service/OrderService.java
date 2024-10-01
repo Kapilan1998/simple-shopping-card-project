@@ -58,9 +58,13 @@ public class OrderService implements OrderInterface {
     }
 
     private List<OrderItem> createOrderItem(Order order, Cart cart) {
+
         return cart.getItems().stream()
                 .map(cartItem -> {
                     Product product = cartItem.getProduct();
+                    if(product.getInventory() < cartItem.getQuantity()){
+                        throw new ServiceException("Sorry you can't order this product, as all were sold",Applicationconstants.NOT_FOUND,HttpStatus.BAD_REQUEST);
+                    }
                     product.setInventory(product.getInventory() - cartItem.getQuantity());
                     productRepository.save(product);
                     return new OrderItem(order, product, cartItem.getUnitPrice(), cartItem.getQuantity());

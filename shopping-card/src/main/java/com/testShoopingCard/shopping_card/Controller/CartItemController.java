@@ -1,8 +1,11 @@
 package com.testShoopingCard.shopping_card.Controller;
 
 import com.testShoopingCard.shopping_card.Dto.ApiResponseDto;
+import com.testShoopingCard.shopping_card.Entity.Cart;
+import com.testShoopingCard.shopping_card.Entity.User;
 import com.testShoopingCard.shopping_card.Service.Interfaces.CartInterface;
 import com.testShoopingCard.shopping_card.Service.Interfaces.CartItemInterface;
+import com.testShoopingCard.shopping_card.Service.Interfaces.UserInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,16 +20,16 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController {
     private final CartItemInterface cartItemInterface;
     private final CartInterface cartInterface;
+    private final UserInterface userInterface;
+
 
     @PostMapping("/addItemToCart")
-    public ResponseEntity<ApiResponseDto> addItemToCart(@RequestParam(required = false) Integer cartId,
-                                                        @RequestParam Integer productId,
+    public ResponseEntity<ApiResponseDto> addItemToCart(@RequestParam Integer productId,
                                                         @RequestParam Integer quantity) {
         try {
-            if(cartId == null){
-                cartId= cartInterface.initializeNewCart();
-            }
-            cartItemInterface.addItemToCart(cartId, productId, quantity);
+            User user = userInterface.getUserById(1);
+            Cart cart = cartInterface.initializeNewCart(user);
+            cartItemInterface.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponseDto("Item added successfully to cart !!!", null));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponseDto(e.getMessage(), null));

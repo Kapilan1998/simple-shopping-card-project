@@ -2,6 +2,7 @@ package com.testShoopingCard.shopping_card.Service;
 
 import com.testShoopingCard.shopping_card.ApplicationConstants.Applicationconstants;
 import com.testShoopingCard.shopping_card.Entity.Cart;
+import com.testShoopingCard.shopping_card.Entity.User;
 import com.testShoopingCard.shopping_card.Exception.ServiceException;
 import com.testShoopingCard.shopping_card.Repository.CartItemRepository;
 import com.testShoopingCard.shopping_card.Repository.CartRepository;
@@ -12,14 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CartService implements CartInterface {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final AtomicInteger cardIdGenerator = new AtomicInteger(0);
 
     @Override
     public Cart getCart(Integer id) {
@@ -46,11 +46,14 @@ public class CartService implements CartInterface {
     }
 
     @Override
-    public Integer initializeNewCart() {
-        Cart newCart = new Cart();
-        Integer newCardId = cardIdGenerator.incrementAndGet();
-        newCart.setId(newCardId);
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
     }
 
     @Override

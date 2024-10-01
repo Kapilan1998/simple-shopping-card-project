@@ -1,6 +1,7 @@
 package com.testShoopingCard.shopping_card.Service.Interfaces;
 
 import com.testShoopingCard.shopping_card.Entity.Cart;
+import com.testShoopingCard.shopping_card.Entity.User;
 
 import java.math.BigDecimal;
 
@@ -9,7 +10,7 @@ public interface CartInterface {
     void clearCart(Integer id);
     BigDecimal getTotalPrice(Integer id);
 
-    Integer initializeNewCart();
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Integer userId);
 }

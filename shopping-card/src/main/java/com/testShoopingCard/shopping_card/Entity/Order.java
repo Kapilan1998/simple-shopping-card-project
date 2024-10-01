@@ -16,11 +16,11 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer orderId;
     private LocalDate orderDate;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)

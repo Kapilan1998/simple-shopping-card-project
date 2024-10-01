@@ -1,6 +1,5 @@
 package com.testShoopingCard.shopping_card.Dto;
 
-import com.testShoopingCard.shopping_card.Entity.Image;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -22,6 +21,6 @@ public class ProductDto {
     private int inventory;
     private String brand;
     private String description;
-    private CategoryDto categoryDto;
-    private List<ImageDto> imageDtoList;
+    private CategoryDto category;
+    private List<ImageDto> images;
 }

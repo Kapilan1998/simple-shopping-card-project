@@ -12,7 +12,6 @@ import com.testShoopingCard.shopping_card.Repository.ProductRepository;
 import com.testShoopingCard.shopping_card.Service.Interfaces.ProductInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class ProductService implements ProductInterface {
     @Override
     public ResponseDto addProduct(ProductDto productDto) {
         ResponseDto responseDto = new ResponseDto();
-        Optional<Category> existingCategoryOpt = categoryRepository.findByName(productDto.getCategoryDto().getName());
+        Optional<Category> existingCategoryOpt = categoryRepository.findByName(productDto.getCategory().getName());
         if (existingCategoryOpt.isEmpty()) {
             throw new ServiceException("This category is not found", Applicationconstants.NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
@@ -117,7 +116,7 @@ public class ProductService implements ProductInterface {
         if (productDto.getId() == null) {
             throw new ServiceException("Product id is required", Applicationconstants.BAD_REQUEST, HttpStatus.BAD_REQUEST);
         }
-        Optional<Category> existingCategoryOpt = categoryRepository.findByName(productDto.getCategoryDto().getName());
+        Optional<Category> existingCategoryOpt = categoryRepository.findByName(productDto.getCategory().getName());
         if (existingCategoryOpt.isEmpty()) {
             throw new ServiceException("This category is not found", Applicationconstants.NOT_FOUND, HttpStatus.BAD_REQUEST);
         }

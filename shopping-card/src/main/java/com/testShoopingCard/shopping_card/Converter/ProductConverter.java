@@ -49,9 +49,9 @@ public class ProductConverter {
 //        productDto.setInventory(product.getInventory());
 //        productDto.setBrand(product.getBrand());
 //        productDto.setDescription(product.getDescription());
-        productDto.setCategoryDto(categoryConverter.convertToDto(product.getCategory()));
+        productDto.setCategory(categoryConverter.convertToDto(product.getCategory()));
         List<ImageDto> imageDtoList = product.getImages().stream().map(imageConverter::convertToDto).toList();
-        productDto.setImageDtoList(imageDtoList);
+        productDto.setImages(imageDtoList);
         return productDto;
     }
 

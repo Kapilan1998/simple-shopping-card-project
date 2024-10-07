@@ -29,7 +29,7 @@ public class CategoryService implements CategoryInterface {
         boolean isNameAvailable = categoryRepository.existsByName(categoryDto.getName());
         log.info("Name availability status {}", isNameAvailable);
         if (isNameAvailable) {
-            throw new ServiceException("This category already exist.", Applicationconstants.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+            throw new ServiceException("This category already exist.", Applicationconstants.BAD_REQUEST, HttpStatus.CONFLICT);
         }
         Category category = categoryConverter.convertToEntity(categoryDto);
         categoryRepository.save(category);

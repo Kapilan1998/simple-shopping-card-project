@@ -7,19 +7,26 @@ import com.testShoopingCard.shopping_card.Dto.UserDto;
 import com.testShoopingCard.shopping_card.Entity.User;
 import com.testShoopingCard.shopping_card.Exception.ServiceException;
 import com.testShoopingCard.shopping_card.Repository.UserRepository;
+import com.testShoopingCard.shopping_card.Security.config.ShoppingCardConfig;
 import com.testShoopingCard.shopping_card.Service.Interfaces.UserInterface;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserInterface {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(Integer userId) {
@@ -35,7 +42,7 @@ public class UserService implements UserInterface {
                     userData.setFirstName(saveUserDto.getFirstName());
                     userData.setLastName(saveUserDto.getLastName());
                     userData.setEmail(saveUserDto.getEmail());
-                    userData.setPassword(saveUserDto.getPassword());
+                    userData.setPassword(passwordEncoder.encode(saveUserDto.getPassword()));
                     return userRepository.save(userData);
                 }).orElseThrow(() -> new ServiceException("Email already exists", Applicationconstants.BAD_REQUEST, HttpStatus.BAD_REQUEST));
     }
@@ -62,5 +69,13 @@ public class UserService implements UserInterface {
     @Override
     public UserDto convertUserToDto(User user){
         return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        log.info("logged in user email ----- "+email);
+        return userRepository.findByEmail(email);
     }
 }

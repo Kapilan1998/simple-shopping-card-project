@@ -38,7 +38,7 @@ public class JwtUtils {
         //details needs to be included in the token going to generate
         return Jwts.builder()
                 .setSubject(userPrincipal.getEmail())       // subject of token
-                .claim("id ", userPrincipal.getEmail())      // Custom data adding ,using claims appending user id inside token
+                .claim("id ", userPrincipal.getId())      // Custom data adding ,using claims appending user id inside token
                 .claim("roles ", roles)                    // Custom data adding , using claims appending roles inside token
                 .setIssuedAt(new Date())                    // token created time(current time LocalTime)
                 .setExpiration(new Date((new Date()).getTime() + expirationTime))   // expiration time

@@ -2,6 +2,7 @@ package com.testShoopingCard.shopping_card.Security.config;
 
 import com.testShoopingCard.shopping_card.Security.Jwt.AuthTokenFilter;
 import com.testShoopingCard.shopping_card.Security.Jwt.JwtAuthEntryPoint;
+import com.testShoopingCard.shopping_card.Security.Jwt.JwtUtils;
 import com.testShoopingCard.shopping_card.Security.user.ShopUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,11 +26,13 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class ShoppingCardConfig {
 
     private final ShopUserDetailsService shopUserDetailsService;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private static final List<String> SECURED_URLS = List.of("/api/v1/cart/**", "/api/v1/cart-item/**");
+    private final JwtUtils jwtUtils;
 
     // used for mapping between DTOs and entity objects
     @Bean
@@ -45,7 +49,7 @@ public class ShoppingCardConfig {
     // filter that processes the incoming requests to check for JWT tokens and validate them.
     @Bean
     public AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwtUtils,shopUserDetailsService);
     }
 
     // responsible for authenticating the users.

@@ -22,7 +22,9 @@ public class ProductController {
 
     // adding method level security here as only accessible by admin
     // if many roles need to access, use  (@PreAuthorize("hasAnyRole('Admin', 'Manager','Student','Teacher')"))
-    @PreAuthorize("hasRole('Admin')")       // only 1 role can be accessed // If the authenticated user has this role, access is granted.
+    // only 1 role can be accessed // If the authenticated user has this role, access is granted.
+    // @PreAuthorize("hasRole('ADMIN')")   // Automatically checks for "ROLE_ADMIN   //  here ROLE_ADMIN must be used, but i didn't set as ROLE_ADMIN, just i set as ADMIN, i used hasAuthority below
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseDto addProduct(@Valid @RequestBody ProductDto productDto) {
         return productService.addProduct(productDto);
@@ -38,13 +40,13 @@ public class ProductController {
         return productService.getAllProductsByCategoryId(categoryId);
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/updateProduct")
     public ResponseDto updateProduct(@Valid @RequestBody ProductDto productDto) {
         return productService.updateProduct(productDto);
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/deletedProduct")
     public ResponseDto deleteProduct(@RequestParam("id") Integer id) {
         return productService.deleteProduct(id);

@@ -6,12 +6,15 @@ import com.testShoopingCard.shopping_card.Entity.User;
 import com.testShoopingCard.shopping_card.Service.Interfaces.CartInterface;
 import com.testShoopingCard.shopping_card.Service.Interfaces.CartItemInterface;
 import com.testShoopingCard.shopping_card.Service.Interfaces.UserInterface;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("/api/v1/cart-item")
@@ -27,12 +30,14 @@ public class CartItemController {
     public ResponseEntity<ApiResponseDto> addItemToCart(@RequestParam Integer productId,
                                                         @RequestParam Integer quantity) {
         try {
-            User user = userInterface.getUserById(5);
+            User user = userInterface.getAuthenticatedUser();
             Cart cart = cartInterface.initializeNewCart(user);
             cartItemInterface.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponseDto("Item added successfully to cart !!!", null));
-        } catch (Exception e) {
+        } catch (ConfigDataResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponseDto(e.getMessage(), null));
+        }catch (JwtException e){
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponseDto(e.getMessage(),null));
         }
     }
 

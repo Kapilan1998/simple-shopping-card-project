@@ -32,7 +32,7 @@ public class ProductService implements ProductInterface {
         ResponseDto responseDto = new ResponseDto();
         Optional<Category> existingCategoryOpt = categoryRepository.findByName(productDto.getCategory().getName());
         if (existingCategoryOpt.isEmpty()) {
-            throw new ServiceException("This category is not found", Applicationconstants.NOT_FOUND, HttpStatus.BAD_REQUEST);
+            throw new ServiceException("This category is not found", Applicationconstants.BAD_REQUEST, HttpStatus.CONFLICT);
         }
         boolean isProductExist = productRepository.existsByName(productDto.getName());
         if (isProductExist) {

@@ -7,6 +7,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,9 +19,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 // this class is custom filter that intercepts each HTTP request to validate the JWT provided in the Authorization header
+// Use @RequiredArgsConstructor to automatically generate constructor with required dependencies
+@Slf4j
+@RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
-    private JwtUtils jwtUtils;
-    private ShopUserDetailsService shopUserDetailsService;
+    private final JwtUtils jwtUtils;
+    private final ShopUserDetailsService shopUserDetailsService;
 
     /**
      *
@@ -40,6 +45,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);         // extracts the JWT from the Authorization header of the request.
             if (StringUtils.hasText(jwt) && jwtUtils.validateToken(jwt)) {      // If the token is valid, the filter continues.
                 String userName = jwtUtils.getUserNameFromJwtToken(jwt);        // get user name from token
+                log.info("generated user name "+ userName);
                 UserDetails userDetails = shopUserDetailsService.loadUserByUsername(userName);   // checks user name from database
                 var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);       // application recognizes the user as authenticated for the remainder of the request.

@@ -12,4 +12,6 @@ public interface UserInterface {
     void deleteUser(Integer userId);
 
     UserDto convertUserToDto(User user);
+
+    User getAuthenticatedUser();
 }
